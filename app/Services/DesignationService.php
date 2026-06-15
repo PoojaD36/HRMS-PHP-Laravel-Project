@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\StatusEnum;
 use App\Models\Designation;
 
 class DesignationService
@@ -10,8 +11,9 @@ class DesignationService
     {
         return Designation::create([
             'department_id' => $data['department_id'],
-            'name' => $data['name'],
-            'status' => $data['status'] ?? true,
+            'name'          => $data['name'],
+            'status'        => $data['status']
+                                ?? StatusEnum::ACTIVE->value,
         ]);
     }
 
@@ -19,6 +21,7 @@ class DesignationService
         Designation $designation,
         array $data
     ): Designation {
+
         $designation->update($data);
 
         return $designation->fresh();

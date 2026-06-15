@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Department;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateDesignationRequest extends FormRequest
 {
@@ -23,9 +25,24 @@ class UpdateDesignationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => 'sometimes|required',
-            'name' => 'sometimes|required|string|max:255',
-            'status' => 'nullable|boolean',
+            'department_id' => [
+                'sometimes',
+                Rule::exists(
+                    (new Department())->getTable(),
+                    'id'
+                ),
+            ],
+
+            'name' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+
+            'status' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 }

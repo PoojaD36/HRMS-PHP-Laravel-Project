@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Department;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDesignationRequest extends FormRequest
 {
@@ -23,9 +25,24 @@ class StoreDesignationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => 'required|exists:tenant.departments,id',
-            'name' => 'required|string|max:255',
-            'status' => 'nullable|boolean',
+            'department_id' => [
+                'required',
+                Rule::exists(
+                    (new Department())->getTable(),
+                    'id'
+                ),
+            ],
+
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'status' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 }

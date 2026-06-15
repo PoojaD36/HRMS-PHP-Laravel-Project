@@ -15,17 +15,17 @@ class DesignationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id'            => $this->id,
             'department_id' => $this->department_id,
 
             'department' => [
-                'id' => $this->department?->id,
+                'id'   => $this->department?->id,
                 'name' => $this->department?->name,
             ],
 
-            'name' => $this->name,
-            'status' => (bool) $this->status,
-            'created_at' => $this->created_at,
+            'name'      => $this->name,
+            'status'    => (bool) $this->status,
+            'created_at'=> $this->created_at,
         ];
     }
 }
