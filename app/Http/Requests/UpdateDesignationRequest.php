@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateDesignationRequest extends FormRequest
+class UpdateDesignationRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,7 @@ class UpdateDesignationRequest extends FormRequest
         return [
             'department_id' => [
                 'sometimes',
-                Rule::exists(
-                    (new Department())->getTable(),
-                    'id'
-                ),
+                'integer',
             ],
 
             'name' => [

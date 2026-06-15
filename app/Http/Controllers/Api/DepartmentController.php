@@ -59,7 +59,7 @@ class DepartmentController extends Controller
 
     public function show($id)
     {
-        $department = Department::findOrFail($id);
+        $department = $this->departmentService->getById($id);
 
         return new DepartmentResource(
             $department
@@ -70,7 +70,7 @@ class DepartmentController extends Controller
         UpdateDepartmentRequest $request,
         $id
     ) {
-        $department = Department::findOrFail($id);
+        $department = $this->departmentService->getById($id);
 
         $department = $this->departmentService
             ->update(
@@ -86,7 +86,7 @@ class DepartmentController extends Controller
 
     public function destroy($id)
     {
-        $department = Department::findOrFail($id);
+        $department = $this->departmentService->getById($id);
 
         $department->delete();
 

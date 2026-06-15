@@ -69,8 +69,7 @@ class DesignationController extends Controller
 
     public function show($id)
     {
-        $designation = Designation::with('department')
-            ->findOrFail($id);
+        $designation = $this->designationService->getById($id);
 
         return $this->successResponse(
             new DesignationResource($designation)
@@ -81,7 +80,7 @@ class DesignationController extends Controller
         UpdateDesignationRequest $request,
         $id
     ) {
-        $designation = Designation::findOrFail($id);
+        $designation = $this->designationService->getById($id);
 
         $designation = $this->designationService
             ->update(
@@ -99,7 +98,7 @@ class DesignationController extends Controller
 
     public function destroy($id)
     {
-        $designation = Designation::findOrFail($id);
+        $designation = $this->designationService->getById($id);
 
         $designation->delete();
 

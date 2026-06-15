@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Designation extends Model
+class Designation extends BaseTenantModel
 {
-    protected $connection = 'tenant';
 
     protected $fillable = [
         'department_id',
