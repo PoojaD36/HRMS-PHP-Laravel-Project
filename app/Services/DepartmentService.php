@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Enums\StatusEnum;
 use App\Models\Department;
 
-class DepartmentService
+class DepartmentService extends BaseService
 {
     public function create(array $data): Department
     {
@@ -17,8 +17,18 @@ class DepartmentService
         ]);
     }
 
-    public function update(Department $department, array $data): Department
+    public function getById(int $id): Department
     {
+        return $this->findOrFail(
+            Department::class,
+            $id
+        );
+    }
+
+    public function update(
+        Department $department,
+        array $data
+    ): Department {
         $department->update($data);
 
         return $department->fresh();

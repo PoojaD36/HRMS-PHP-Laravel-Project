@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\DesignationController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,4 +40,5 @@ Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
 
     Route::apiResource('departments', DepartmentController::class);
     Route::apiResource('designations', DesignationController::class);
+    Route::apiResource('employees', EmployeeController::class);
 });
