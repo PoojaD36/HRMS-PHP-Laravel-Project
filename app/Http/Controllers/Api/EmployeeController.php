@@ -10,6 +10,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -144,11 +145,13 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        $employee = Employee::with([
-            'department',
-            'designation',
-            'manager',
-        ])->findOrFail($id);
+        $employee = $this->employeeService
+            ->getById($id)
+            ->load([
+                'department',
+                'designation',
+                'manager',
+            ]);
 
         return $this->successResponse(
             new EmployeeResource($employee)
@@ -156,15 +159,40 @@ class EmployeeController extends Controller
     }
 
     public function update(
-        UpdateEmployeeRequest $request,
-        $id
+    UpdateEmployeeRequest $request,
+    $id
     ) {
-        // We'll implement update service next
+
+        $employee = $this->employeeService
+            ->getById($id);
+
+        $employee = $this->employeeService
+            ->update(
+                $employee,
+                $request->validated()
+            );
+
+        return $this->successResponse(
+            new EmployeeResource($employee),
+            'Employee updated successfully'
+        );
     }
 
     public function destroy($id)
     {
-        $employee = Employee::findOrFail($id);
+        $employee = $this->employeeService
+            ->getById($id);
+
+        if (
+            $employee->profile_image &&
+            Storage::disk('public')->exists(
+                $employee->profile_image
+            )
+        ) {
+            Storage::disk('public')->delete(
+                $employee->profile_image
+            );
+        }
 
         $employee->delete();
 

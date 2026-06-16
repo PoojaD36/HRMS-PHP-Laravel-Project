@@ -128,4 +128,86 @@ class EmployeeService extends BaseService
             $id
         );
     }
+
+    public function update(
+    Employee $employee,
+    array $data
+    ): Employee {
+
+        $this->validateRelationsForUpdate($data);
+
+        if (
+            isset($data['profile_image']) &&
+            $data['profile_image']
+        ) {
+
+            if (
+                $employee->profile_image &&
+                Storage::disk('public')->exists(
+                    $employee->profile_image
+                )
+            ) {
+                Storage::disk('public')->delete(
+                    $employee->profile_image
+                );
+            }
+
+            $data['profile_image'] =
+                $this->uploadProfileImage(
+                    $data['profile_image']
+                );
+        }
+
+        $employee->update($data);
+
+        return $employee->fresh([
+            'department',
+            'designation',
+            'manager',
+        ]);
+    }
+
+    protected function validateRelationsForUpdate(
+    array $data
+    ): void {
+
+        if (
+            isset($data['department_id']) &&
+            ! Department::find(
+                $data['department_id']
+            )
+        ) {
+            throw ValidationException::withMessages([
+                'department_id' => [
+                    'Department not found.'
+                ]
+            ]);
+        }
+
+        if (
+            isset($data['designation_id']) &&
+            ! Designation::find(
+                $data['designation_id']
+            )
+        ) {
+            throw ValidationException::withMessages([
+                'designation_id' => [
+                    'Designation not found.'
+                ]
+            ]);
+        }
+
+        if (
+            isset($data['reporting_manager_id']) &&
+            ! Employee::find(
+                $data['reporting_manager_id']
+            )
+        ) {
+            throw ValidationException::withMessages([
+                'reporting_manager_id' => [
+                    'Manager not found.'
+                ]
+            ]);
+        }
+    }
 }

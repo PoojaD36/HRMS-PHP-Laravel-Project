@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\CompanyCodeGenerator;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +31,9 @@ class CompanyService
 
         $company = Company::create([
             'uuid' => Str::uuid(),
-            'company_code' => strtoupper(Str::random(8)),
+            'company_code' => CompanyCodeGenerator::generate(
+                $data['company_name']
+            ),
             'name' => $data['company_name'],
             'email' => $data['company_email'],
             'phone' => $data['phone'] ?? null,
